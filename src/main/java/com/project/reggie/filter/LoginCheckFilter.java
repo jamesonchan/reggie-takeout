@@ -23,7 +23,7 @@ public class LoginCheckFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        Object userId = request.getSession().getAttribute("employee");
+        Long empId = (Long) request.getSession().getAttribute("employee");
         String requestURI = request.getRequestURI();
         String[] urls = new String[]{
                 "/employee/login",
@@ -40,8 +40,8 @@ public class LoginCheckFilter implements Filter {
             return;
         }
 
-        if (userId != null) {
-            log.info("User is already logged in, user id: {}", userId);
+        if (empId != null) {
+            log.info("User is already logged in, user id: {}", empId);
             filterChain.doFilter(request, response);
             return;
         }
