@@ -123,5 +123,21 @@ public class EmployeeController {
         return R.success("employee info updated successfully");
     }
 
+    /**
+     * get employee info by id
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public R<Employee> getById(@PathVariable Long id) {
+        log.info("get employee info by id");
+        Employee employee = employeeService.getById(id);
+        if (employee != null) {
+            return R.success(employee);
+        }
+        return R.error("Employee info not found");
+    }
+
 
 }
