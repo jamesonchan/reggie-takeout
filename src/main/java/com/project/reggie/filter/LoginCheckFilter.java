@@ -1,6 +1,7 @@
 package com.project.reggie.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.project.reggie.common.BaseContext;
 import com.project.reggie.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -42,6 +43,7 @@ public class LoginCheckFilter implements Filter {
 
         if (empId != null) {
             log.info("User is already logged in, user id: {}", empId);
+            BaseContext.setCurrentId(empId);
             filterChain.doFilter(request, response);
             return;
         }

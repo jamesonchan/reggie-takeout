@@ -12,11 +12,10 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
-@Slf4j
 @RestController
 @RequestMapping("/employee")
+@Slf4j
 public class EmployeeController {
 
     @Autowired
@@ -73,15 +72,9 @@ public class EmployeeController {
      * @return
      */
     @PostMapping
-    public R<String> save(HttpServletRequest request, @RequestBody Employee employee) {
+    public R<String> save(@RequestBody Employee employee) {
         log.info("create new employee and save: {}", employee.toString());
-        Long empId = (Long) request.getSession().getAttribute("employee");
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setCreateUser(empId);
-        employee.setUpdateUser(empId);
-
         employeeService.save(employee);
         return R.success("save new employee successfully");
     }
@@ -109,16 +102,12 @@ public class EmployeeController {
     /**
      * update employee info by id
      *
-     * @param request
      * @param employee
      * @return
      */
     @PutMapping
-    public R<String> update(HttpServletRequest request, @RequestBody Employee employee) {
+    public R<String> update(@RequestBody Employee employee) {
         log.info(employee.toString());
-        Long empId = (Long) request.getSession().getAttribute("employee");
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(empId);
         employeeService.updateById(employee);
         return R.success("employee info updated successfully");
     }

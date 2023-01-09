@@ -1,9 +1,9 @@
-package com.project.reggie.dao;
+package com.project.reggie.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.project.reggie.domain.Employee;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface EmployeeDao extends BaseMapper<Employee> {
+public interface EmployeeMapper extends BaseMapper<Employee> {
 }
