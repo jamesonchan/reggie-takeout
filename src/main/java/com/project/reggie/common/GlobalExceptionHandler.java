@@ -31,4 +31,16 @@ public class GlobalExceptionHandler {
         }
         return R.error("operation failed please try again later");
     }
+
+    /**
+     * custom exception handler
+     * @param exception
+     * @return
+     */
+    @ExceptionHandler(CustomException.class)
+    public R<String> exceptionHandler(CustomException exception) {
+        String message = exception.getMessage();
+        log.error(message);
+        return R.error(message);
+    }
 }

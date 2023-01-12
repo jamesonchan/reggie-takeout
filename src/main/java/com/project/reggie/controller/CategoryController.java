@@ -29,6 +29,13 @@ public class CategoryController {
         return R.success("new category saved successfully");
     }
 
+    /**
+     * category pagination
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/page")
     public R<Page> page(int page, int pageSize) {
         Page<Category> pageInfo = new Page<>(page, pageSize);
@@ -36,5 +43,18 @@ public class CategoryController {
         queryWrapper.orderByAsc(Category::getSort);
         categoryService.page(pageInfo, queryWrapper);
         return R.success(pageInfo);
+    }
+
+    /**
+     * delete category by id
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping
+    public R<String> delete(Long id) {
+        log.info("delete category, id: {}", id);
+        categoryService.remove(id);
+        return R.success("category deleted");
     }
 }
