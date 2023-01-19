@@ -81,4 +81,17 @@ public class SetmealController {
         return R.success(dtoPage);
     }
 
+    /**
+     * delete setmeal by id or ids
+     *
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    public R<String> delete(@RequestParam List<Long> ids) {
+        log.info("ids: {}", ids);
+        setmealService.removeWithDish(ids);
+        return R.success("setmeal deleted successfully");
+    }
+
 }

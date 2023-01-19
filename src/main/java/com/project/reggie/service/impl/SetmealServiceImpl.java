@@ -1,6 +1,8 @@
 package com.project.reggie.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.project.reggie.common.CustomException;
 import com.project.reggie.domain.Setmeal;
 import com.project.reggie.domain.SetmealDish;
 import com.project.reggie.dto.SetmealDto;
@@ -37,5 +39,28 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
                 .peek(item -> item.setSetmealId(setmealDto.getId()))
                 .collect(Collectors.toList());
         setmealDishService.saveBatch(setmealDishes);
+    }
+
+    /**
+     * delete setmeal by id or ids
+     *
+     * @param ids
+     */
+    @Override
+    @Transactional
+    public void removeWithDish(List<Long> ids) {
+        LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(Setmeal::getId, ids);
+        queryWrapper.eq(Setmeal::getStatus, 1);
+
+        long count = this.count(queryWrapper);
+        if (count > 0) {
+            throw new CustomException("cannot delete a setmeal that is on sale");
+        }
+
+        this.removeByIds(ids);
+        LambdaQueryWrapper<SetmealDish> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.in(SetmealDish::getSetmealId, ids);
+        setmealDishService.remove(lambdaQueryWrapper);
     }
 }
