@@ -94,6 +94,7 @@ public class DishController {
 
     /**
      * update dish
+     *
      * @param dishDto
      * @return
      */
@@ -102,6 +103,23 @@ public class DishController {
         log.info(dishDto.toString());
         dishService.updateWithFlavor(dishDto);
         return R.success("saved dish successfully");
+    }
+
+    /**
+     * get dish list by dish
+     *
+     * @param dish
+     * @return
+     */
+    @GetMapping("/list")
+    public R<List<Dish>> list(Dish dish) {
+        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(dish.getCategoryId() != null, Dish::getCategoryId, dish.getCategoryId());
+        queryWrapper.eq(Dish::getStatus, 1);
+        queryWrapper.orderByAsc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
+
+        List<Dish> dishList = dishService.list(queryWrapper);
+        return R.success(dishList);
     }
 
 
